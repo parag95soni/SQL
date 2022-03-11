@@ -80,15 +80,13 @@ values
  (006, 'Lead', '2016-06-11 00:00:00'),
  (003, 'Lead', '2016-06-11 00:00:00')
 
-/**
- Link for Questions https://www.techbeamers.com/sql-query-questions-answers-for-practice/
-**/
 
---1 Write an SQL query to fetch “FIRST_NAME” from Worker table using the alias name as <WORKER_NAME>.
+
+--1
 Select firstname as workername
 from worker
 
---2 Write an SQL query to fetch “FIRST_NAME” from Worker table in upper case.
+--2
 select UPPER(FirstName)
 from worker
 
