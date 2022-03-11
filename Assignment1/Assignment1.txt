@@ -1,0 +1,372 @@
+************************************************************************************
+
+SQL Assignement 1
+
+************************************************************************************
+
+***Switch to database***
+use Assignement1
+
+***Create Table***
+create table worker
+( worker_id int,
+firstname varchar(50),
+lastname varchar(50),
+salary int,
+joining_date datetime,
+department varchar(50))
+
+***Display Table***
+select * from worker
+
+***Add Primary key to existing Column***
+alter table worker 
+alter column worker_id int not null
+
+alter table worker
+add Primary key (worker_id)
+
+*** Insert Data Into Workers Table***
+INSERT INTO Worker 
+ VALUES
+(001, 'Monika', 'Arora', 100000, '2014-02-20 11:00:00' , 'HR')
+(002, 'Niharika', 'Verma', 80000, '2014-06-11 09:00:00', 'Admin'),
+(003, 'Vishal', 'Singhal', 300000, '2014-02-20 09:00:00 ', 'HR'),
+(004, 'Amitabh', 'Singh', 500000, '2014-02-20 09:00:00 ', 'Admin'),
+(005, 'Vivek', 'Bhati', 500000, '2014-06-11 09:00:00 ', 'Admin'),
+(006, 'Vipul', 'Diwan', 200000, '2014-06-11 09:00:00 ', 'Account'),
+(007, 'Satish', 'Kumar', 75000, '2014-01-20 09:00:00 ', 'Account'),
+(008, 'Geetika', 'Chauhan', 90000, '2014-04-11 09:00:00 ', 'Admin')
+
+*** Create Table Bonus***
+CREATE TABLE Bonus (
+	WORKER_REF_ID INT,
+	BONUS_AMOUNT INT,
+	BONUS_DATE DATETIME,
+	FOREIGN KEY (WORKER_REF_ID)
+		REFERENCES Worker(WORKER_ID)
+        ON DELETE CASCADE
+)
+
+***Insert Data In Bonus***
+insert into Bonus
+values
+(001, 5000, '2016-02-20'),
+(002, 3000, '2016-06-11'),
+(003, 4000, '2016-02-20'),
+(001, 4500, '2016-02-20'),
+(002, 3500, '2016-06-11')
+
+***Create Table Title***
+CREATE TABLE Title (
+	WORKER_REF_ID INT,
+	WORKER_TITLE varchar(25),
+	AFFECTED_FROM DATETIME,
+	FOREIGN KEY (WORKER_REF_ID)
+		REFERENCES Worker(WORKER_ID)
+        ON DELETE CASCADE
+);
+
+
+***Data Insert Into Title***
+insert into Title
+values
+(001, 'Manager', '2016-02-20 00:00:00'),
+ (002, 'Executive', '2016-06-11 00:00:00'),
+ (008, 'Executive', '2016-06-11 00:00:00'),
+ (005, 'Manager', '2016-06-11 00:00:00'),
+ (004, 'Asst. Manager', '2016-06-11 00:00:00'),
+ (007, 'Executive', '2016-06-11 00:00:00'),
+ (006, 'Lead', '2016-06-11 00:00:00'),
+ (003, 'Lead', '2016-06-11 00:00:00')
+
+/**
+ Link for Questions https://www.techbeamers.com/sql-query-questions-answers-for-practice/
+**/
+
+--1 Write an SQL query to fetch “FIRST_NAME” from Worker table using the alias name as <WORKER_NAME>.
+Select firstname as workername
+from worker
+
+--2 Write an SQL query to fetch “FIRST_NAME” from Worker table in upper case.
+select UPPER(FirstName)
+from worker
+
+--3
+select Distinct(Department)
+from worker
+
+--4
+select SUBSTRING(firstname,1,3)
+from worker
+
+--5
+select charindex(firstname,'a')
+from worker
+where firstname = 'Amitabh'
+
+--6
+select RTRIM(firstname)
+from worker
+
+--7
+select LTRIM(department)
+from worker
+
+--8
+select distinct department, LEN(department)
+from worker
+
+--9
+select REPLACE(firstname,'a','A')
+from worker
+
+--10
+select firstname+' '+lastname as fullname
+from worker
+
+--11
+select * 
+from worker
+order by firstname
+
+--12
+select * 
+from worker
+order by firstname asc, department desc
+
+--13
+select * 
+from worker
+where firstname in('Vipul','Satish')
+
+--14
+select *
+from worker
+where firstname not in('Vipul','Satish')
+
+--15
+select * 
+from worker
+where department = 'Admin'
+
+--16
+select *
+ from worker
+  where firstname like '%a%'
+
+--17
+select *
+ from worker
+  where firstname like '%a'
+
+--18
+select * 
+from worker
+where firstname like '_____h'
+
+--19 
+select * 
+from worker
+where salary between 100000 and 500000
+
+--20
+select * 
+from worker
+where year(joining_date) = 2014 and month(joining_date) = 02
+
+--21
+select count(worker_id)
+from worker
+where department = 'Admin'
+
+select department, count(Department) as countofemployeeworkingasadmin
+from worker
+group by department
+having department = 'Admin'
+
+--22
+select firstname+' '+lastname as worker_name,salary
+from worker
+where salary >= 50000  and salary <=100000
+
+SELECT firstname+' '+lastname As Worker_Name, Salary
+FROM worker 
+WHERE WORKER_ID IN 
+(SELECT WORKER_ID FROM worker 
+WHERE Salary BETWEEN 50000 AND 100000)
+
+--23
+select department,count(*) as WorkerPerDepartment
+from worker
+group by department
+order by WorkerPerDepartment desc
+
+--24
+select worker_id,firstname,lastname,worker_title,salary
+from worker
+inner join title
+on worker.worker_id = title.worker_ref_id
+where worker_title = 'Manager'
+
+--25
+select worker_title,AFFECTED_FROM,count(*)
+from Title
+group by worker_title,AFFECTED_FROM
+having count(*) > 1
+
+--26
+select * 
+from worker
+where worker_id%2 <> 0
+
+--27
+select * 
+from worker
+where worker_id%2 = 0
+
+--28
+select *
+into workerclone
+from worker
+
+select * from workerclone
+
+--29
+(SELECT * FROM Worker)
+INTERSECT
+(SELECT * FROM WorkerClone)
+
+--30
+select * from worker
+Except
+select * from workerclone
+
+--31
+Select GETDATE()
+
+--32
+select top 5 *
+from worker
+
+--33
+SELECT TOP 1 Salary
+FROM worker
+where salary in (SELECT DISTINCT TOP 5 Salary FROM Worker ORDER BY Salary DESC)
+order by salary
+
+--34
+select distinct salary
+from worker w1
+where 5 = (SELECT COUNT( DISTINCT ( W2.Salary ) )
+			FROM Worker W2
+			where w2.salary >= w1.salary)
+
+--35
+select * 
+from worker
+where salary in (select salary
+		from worker
+		group by salary
+		having COUNT(salary) > 1)
+
+--36
+Select max(Salary) 
+from Worker 
+where Salary not in (Select max(Salary) 
+			from Worker)
+
+--37
+select *
+from worker
+union all
+select * 
+from worker
+order by worker_id
+
+--38
+select * from worker
+intersect
+select * from workerclone
+
+
+--39
+select * 
+from worker
+where worker_id <= (select count(*) * 0.5 
+			from worker)
+
+--40
+select department,count(department) 
+from worker
+group by department
+having COUNT(department) < 5
+
+--41
+select department,count(department) as NumberOfEmployeePerDepartment
+from worker
+group by department
+
+--42
+select * 
+from worker
+where worker_id = (select count(*) 
+			from worker)
+
+--43
+select * 
+from worker
+where worker_id = (select min(worker_id)
+			from worker)
+
+select Top 1 * from worker
+
+--44
+select Top 5 *
+ from worker
+ order by worker_id desc
+
+ --45
+ SELECT t.DEPARTMENT,t.FIRSTNAME,t.Salary 
+ from(SELECT max(Salary) as MaxSalary,DEPARTMENT 
+		from Worker 
+		group by DEPARTMENT) as TempTable
+Inner Join Worker t 
+on TempTable.DEPARTMENT=t.DEPARTMENT and TempTable.MaxSalary=t.Salary
+
+--46
+SELECT distinct Salary 
+from worker a 
+WHERE 3 >= (SELECT count(distinct Salary) 
+			from worker b 
+			WHERE a.Salary <= b.Salary) 
+order by a.Salary desc
+
+--47
+SELECT distinct Salary 
+from worker a 
+WHERE 3 >= (SELECT count(distinct Salary) 
+			from worker b 
+			WHERE a.Salary >= b.Salary) 
+order by a.Salary desc
+
+--48
+SELECT distinct Salary 
+from worker a 
+WHERE 4 >= (SELECT count(distinct Salary) 
+			from worker b 
+			WHERE a.Salary >= b.Salary) 
+order by a.Salary desc
+
+
+--49
+select department,sum(salary)
+from worker
+group by department
+
+--50
+select firstname,salary
+from worker
+where salary = (select max(salary)
+		from worker)
+
