@@ -1,0 +1,73 @@
+Create Tables 
+
+create table Emp
+(
+empno int not null Primary Key,
+ename varchar(50),
+job varchar(50),
+mgr int,
+hiredate datetime,
+sal int,
+comm int,
+deptno int)
+
+create table Dept
+(
+deptno int not null Primary Key,
+dname varchar(50),
+loc varchar(50))
+
+Insert into Dept
+Values
+(10, 'ACCOUNTING', 'NEW YORK'),
+(20, 'RESEARCH', 'DALLAS'),
+(30, 'SalES', 'CHICAGO'),
+(40, 'OPERATIONS', 'BOSTON')
+
+Insert into Emp
+Values
+( 7839, 'KING', 'PRESIDENT', NULL, CONVERT(DATETIME,'17-11-1981',103), 5000, NULL, 10 ), 
+( 7698, 'BLAKE', 'MANAGER', 7839, CONVERT(DATETIME,'1-5-1981',103), 2850, NULL, 30 ),
+( 7782, 'CLARK', 'MANAGER', 7839, CONVERT(DATETIME,'9-6-1981',103), 2450, NULL, 10 ), 
+( 7566, 'JONES', 'MANAGER', 7839, CONVERT(DATETIME,'2-4-1981',103), 2975, NULL, 20 ), 
+( 7788, 'SCOTT', 'ANALYST', 7566, CONVERT(DATETIME,'13-JUL-87',103) - 85, 3000, NULL, 20 ), 
+( 7902, 'FORD', 'ANALYST', 7566, CONVERT(DATETIME,'3-12-1981',103), 3000, NULL, 20 ),
+( 7369, 'SMITH', 'CLERK', 7902, CONVERT(DATETIME,'17-12-1980',103), 800, NULL, 20 ),
+( 7499, 'ALLEN', 'SalESMAN', 7698, CONVERT(DATETIME,'20-2-1981',103), 1600, 300, 30 ), 
+( 7521, 'WARD', 'SalESMAN', 7698, CONVERT(DATETIME,'22-2-1981',103), 1250, 500, 30 ),
+( 7654, 'MARTIN', 'SalESMAN', 7698, CONVERT(DATETIME,'28-9-1981',103), 1250, 1400, 30 ), 
+( 7844, 'TURNER', 'SalESMAN', 7698, CONVERT(DATETIME,'8-9-1981',103), 1500, 0, 30 ),
+( 7876, 'ADAMS', 'CLERK', 7788, CONVERT(DATETIME,'13-JUL-87', 103), 1100, NULL, 20 ), 
+( 7900, 'JAMES', 'CLERK', 7698, CONVERT(DATETIME,'3-12-1981',103), 950, NULL, 30 ),
+( 7934, 'MILLER', 'CLERK', 7782, CONVERT(DATETIME,'23-1-1982',103), 1300, NULL, 10 )
+
+
+--1
+select e.empno as Employee,e.ename Employee_ID,m.empno Manager_ID,m.ename as Manager
+from emp e
+join emp m
+on e.mgr = m.empno
+
+--2
+Select ename,dname
+from emp
+join dept
+on emp.deptno = dept.deptno
+
+--3
+select distinct Top 1 * 
+from emp 
+where sal <> (Select max(Sal) from emp) 
+order by sal desc
+
+Generic :
+Select ename,sal
+from emp e1
+where 0 = (Select Count(Distinct sal) from emp e2 where e2.sal > e1.sal)
+
+--4
+select * 
+from Emp
+where hiredate in (Select Top 1 Min(hiredate) from Emp
+			union
+			Select Top 1 max(hiredate) from Emp)

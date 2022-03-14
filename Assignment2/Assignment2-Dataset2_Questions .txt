@@ -1,0 +1,4 @@
+1) Write a query to display the employee name and his manager’s name.
+2) Fetch employee name and his department name.
+3) Who is second highest salaried employee in the list?
+4) List out the first employee who is with the company from the beginning and who is joined lately.

@@ -1,0 +1,60 @@
+create Database Assignment2
+
+use Assignment2
+
+Create Table Students
+(
+student_id int Not null,
+sname varchar(50),
+city varchar(50),
+phone int,
+ActualFee int,
+Paid_amount int,
+balance int,
+Total_Marks int) 
+
+select * from Students
+
+insert into Students
+values
+ (104, N'Hannah', N'Ajman', 5374719, CAST(20000.00 AS Decimal(10, 2)), CAST(10000.00 AS Decimal(10, 2)), CAST(0.00 AS Decimal(10, 2)), 860),
+ (105, N'Abdullah', N'Al Ain', NULL, CAST(20000.00 AS Decimal(10, 2)), CAST(10000.00 AS Decimal(10, 2)), CAST(0.00 AS Decimal(10, 2)), 744),
+ (106, N'Blake', N'Dubai', 5374712, CAST(20000.00 AS Decimal(10, 2)), CAST(9000.00 AS Decimal(10, 2)), CAST(0.00 AS Decimal(10, 2)), 990),
+ (107, N'Robin', N'Dubai', 5374713, CAST(20000.00 AS Decimal(10, 2)), CAST(11000.00 AS Decimal(10, 2)), CAST(0.00 AS Decimal(10, 2)), 980),
+ (108, N'Martin', N'Abu Dhabi', 5374714, CAST(20000.00 AS Decimal(10, 2)), CAST(10000.00 AS Decimal(10, 2)), CAST(0.00 AS Decimal(10, 2)), 801),
+ (109, N'James', N'Ajman', 5374719, CAST(15000.00 AS Decimal(10, 2)), CAST(10000.00 AS Decimal(10, 2)), CAST(0.00 AS Decimal(10, 2)), 701),
+ (110, N'Jones', N'Al Ain', NULL, CAST(20000.00 AS Decimal(10, 2)), CAST(10000.00 AS Decimal(10, 2)), CAST(0.00 AS Decimal(10, 2)), 601),
+ (111, N'Scott', N'Dubai', 5374712, CAST(20000.00 AS Decimal(10, 2)), CAST(9000.00 AS Decimal(10, 2)), CAST(0.00 AS Decimal(10, 2)), 990),
+ (112, N'Miller', N'Dubai', 5374713, CAST(20000.00 AS Decimal(10, 2)), CAST(11000.00 AS Decimal(10, 2)), CAST(0.00 AS Decimal(10, 2)), 980),
+ (113, N'Allen', N'Abu Dhabi', 5374714, CAST(20000.00 AS Decimal(10, 2)), CAST(10000.00 AS Decimal(10, 2)), CAST(0.00 AS Decimal(10, 2)), 801),
+ (114, N'Ward', N'Ajman', 5374719, CAST(20000.00 AS Decimal(10, 2)), CAST(10000.00 AS Decimal(10, 2)), CAST(0.00 AS Decimal(10, 2)), 701),
+ (115, N'Smith', N'Al Ain', NULL, CAST(20000.00 AS Decimal(10, 2)), CAST(10000.00 AS Decimal(10, 2)), CAST(0.00 AS Decimal(10, 2)), 601)
+
+--1
+select * 
+from students
+where Phone is Null
+
+--2
+select Student_id,ActualFee,(ActualFee - ActualFee * 0.1) as Actual_Fee_After_Discount
+from Students
+
+--3
+Create Procedure StudentBalanceUpdate
+As
+update Students
+Set balance = (ActualFee - ActualFee * 0.1) - Paid_amount
+
+Select * from Students
+
+exec StudentBalanceUpdate
+
+--4
+Select  Top 5 * 
+from Students
+order by Total_Marks
+
+--5
+Select City,count(student_id) as Number_Of_Student_Per_City
+From students
+group by city
