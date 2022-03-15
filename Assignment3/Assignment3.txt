@@ -1,0 +1,106 @@
+Create Database Assignment3
+
+use Assignment3
+
+CREATE TABLE Worker 
+(ID INT PRIMARY KEY IDENTITY(1,1) ,
+ First_Name VARCHAR (20) NOT NULL , 
+ Last_Name VARCHAR(20) , 
+ EMAIL varchar(50) ,
+ DEPARTMENT VARCHAR(20) NOT NULL , 
+ Salary INT , 
+ Join_Date DATE)
+
+INSERT INTO Worker 
+Values
+('Vishal','Rathore','vishalrathore@ineuron.com','Finance', 45000,'2018-02-12'),
+('Rahul','Sarathe','rahulsarathe@ineuron.com','HR', 60000,  '2017-04-17'),
+('Anisha','Gour','anishagour@ineuron.com','Purchase', 30000, '2017-12-20'),
+('Saksham','Mahajan','sakshammahajan@ineuron.com','Finance', 60000, '2019-11-12'),
+('Aakash','Singh','amansingh@ineuron.com','Purchase',30000,  '2017-09-05'),
+('Ankit','Kumar','ankitkumar@ineuron.com','Marketing', 50000,  '2020-01-14'),
+('Riya','Agarwal','riyaagarwal@ineuron.com','Finance', 45000, '2018-04-23'),
+('Nishit','Sharma','nishitsharma@ineuron.com','Purchase', 48000, '2018-10-10'),
+('Samay','Raina','samayraina@ineuron.com','Marketing', 36000,  '2017-08-22'),
+('Aman','Singh','amansingh@ineuron.com','Finance', 45000,  '2017-08-12'),
+('Sarthak','Jain','sarthakjain@ineuron.com','Purchase', 48000,  '2018-04-08'),
+('Ashutosh','Patil','ashutoshpatil@ineuron.com','PR', 50000,  '2019-09-26'),
+('Harshit','Kumar','harshitkumar@ineuron.com','HR', 40000,  '2018-06-05'),
+('Ayush','Srivastav','ayushsrivastav@ineuron.com','Purchase', 30000,  '2018-08-24'),
+('Shreyansh','Deriya','shreyanshderiya@ineuron.com','PR', 35000, '2017-07-13'),
+('Aryan','Sharma','aryansharma@ineuron.com','Finance', 60000,  '2019-10-31'),
+('Snehal','Reddy','snehalreddy@ineuron.com','HR', 40000, '2019-03-28'),
+('Shubham','Mittal','shubhammittal@ineuron.com','PR', 35000,'2020-02-01'),
+('Rakshit','Rao','rakshitao@ineuron.com','Marketing', 36000, '2018-11-30')
+
+--1
+SELECT first_name,Last_Name,Salary,DEPARTMENT
+FROM Worker
+where Salary in (select  max(salary) from Worker group by Department)
+
+--2
+Select *
+from Worker w1
+where 2 = (Select COUNT(Distinct Salary) 
+				from worker w2
+				where w2.Salary > w1.Salary)
+--3
+Select First_Name,REPLACE(First_Name,'a','A') As repalced
+from Worker
+
+--4
+Select First_name,Salary
+from worker
+where salary = (Select max(salary) from Worker)
+
+--5
+select *,
+case 
+	when Email = CONCAT(lower(first_name),lower(last_name),'@ineuron.com') then 'Validation Success'
+	Else 'Validation Failed'
+END as Email_Validation
+from Worker
+
+--6
+Select * 
+from Worker
+where MONTH(join_date) = 2 and YEAR(join_date) = 2020
+
+--7
+with t1 
+as(
+select *,ROW_NUMBER() over(order by ID) row_no
+from Worker
+)
+select * 
+from t1
+where t1.row_no % 2 <> 0
+
+--8
+select *
+into workerclone
+from worker
+
+select * from workerclone
+
+--9
+with t1 as (select w.ID from Worker w left join workerclone wc on w.ID = wc.ID)
+select *
+from workerclone
+where id not in (Select * from t1)
+
+--10
+Declare @n as int
+set @n = 10
+select Top (@n) * 
+from Worker
+
+--11
+Declare @m as int
+set @m = 5;
+with t1 
+as (Select *,ROW_NUMBER() over(order by Salary desc) as rownumber from Worker) 
+Select * 
+from t1
+where rownumber = @m
+
