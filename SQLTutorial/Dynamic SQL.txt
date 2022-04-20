@@ -1,0 +1,15 @@
+--Define Database on which Query need to executed
+use Assignment2
+
+--Declare User Define Variable
+Declare @sql nvarchar(1000)
+Declare @params nvarchar(50)
+
+--Define the Declared  SQL Query varaible
+SET @sql = 'Select * from students where city=@city'
+SET @params = '@city nvarchar(50)'
+
+print @sql
+
+--Prepare the SQL Query
+execute sp_executesql @sql,@params,@city='Dubai'
